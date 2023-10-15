@@ -8,7 +8,11 @@ import {
   Button,
   StyleSheet,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
+const image = {
+  uri: "https://st2.depositphotos.com/26272052/44757/v/450/depositphotos_447576972-stock-illustration-glowing-neon-life-insurance-icon.jpg",
+};
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -23,10 +27,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient
-      colors={["#f2ff24", "#c2c04f", "#00d4ff"]}
-      style={styles.container}
-    >
+    <ImageBackground source={image} style={styles.image}>
       <View style={styles.container}>
         <Text style={styles.title}>LEADING U TO A 100</Text>
         <TextInput
@@ -42,12 +43,14 @@ const LoginScreen = ({ navigation }) => {
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
-        <Button title="Login" onPress={handleLogin} />
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
           <Text style={styles.signupText}>Don't have an account? Sign up!</Text>
         </TouchableOpacity>
       </View>
-    </LinearGradient>
+    </ImageBackground>
   );
 };
 
@@ -58,21 +61,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
   },
+  loginButton: {
+    backgroundColor: "white",
+    padding: 15,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
   title: {
-    fontSize: 24,
-    marginBottom: 16,
+    color: "white", // or any other color that contrasts well with skyblue
+    fontSize: 28,
+    fontWeight: "bold",
   },
   input: {
     height: 40,
     width: "80%",
-    borderColor: "gray",
+    borderColor: "white",
     borderWidth: 1,
     marginBottom: 16,
     paddingLeft: 8,
   },
   signupText: {
     marginTop: 16,
-    color: "blue",
+    color: "white",
   },
 });
 
