@@ -1,6 +1,6 @@
 // screens/LoginScreen.js
 import React, { useState } from "react";
-import { LinearGradient } from "expo-linear-gradient";
+
 import {
   View,
   Text,
