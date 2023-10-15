@@ -9,6 +9,7 @@ OPENAI_API_ENDPOINT = (
 )
 
 
+
 @app.route("/recognize", methods=["POST"])
 def recognize_image():
     # Get image data from the JSON body
