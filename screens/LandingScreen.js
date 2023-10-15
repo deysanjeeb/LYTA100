@@ -78,7 +78,6 @@ const LandingPage = ({ navigation }) => {
     for (const item of appleHealthData) {
       const flattenedObject = flattenObjectWithLastKey(item);
       const restructuredObj = mapKeysToLastPart(flattenedObject);
-      // console.log("FO", flattenedObject);
       dateField.push(restructuredObj.date);
       metricField.push(restructuredObj.steps);
     }
@@ -94,10 +93,6 @@ const LandingPage = ({ navigation }) => {
       { date: dateField, data: [{ data: metricField }] },
     ]);
   }, []);
-
-  useEffect(() => {
-    console.log("his", historicalCharts);
-  }, [historicalCharts]);
 
   return (
     // <View style={styles.container}>
