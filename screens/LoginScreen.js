@@ -1,5 +1,6 @@
 // screens/LoginScreen.js
 import React, { useState } from "react";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   View,
   Text,
@@ -22,26 +23,31 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-      />
-      <Button title="Login" onPress={handleLogin} />
-      <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-        <Text style={styles.signupText}>Don't have an account? Sign up!</Text>
-      </TouchableOpacity>
-    </View>
+    <LinearGradient
+      colors={["#f2ff24", "#c2c04f", "#00d4ff"]}
+      style={styles.container}
+    >
+      <View style={styles.container}>
+        <Text style={styles.title}>LEADING U TO A 100</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
+        <Button title="Login" onPress={handleLogin} />
+        <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+          <Text style={styles.signupText}>Don't have an account? Sign up!</Text>
+        </TouchableOpacity>
+      </View>
+    </LinearGradient>
   );
 };
 
