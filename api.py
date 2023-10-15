@@ -4,14 +4,17 @@ from flask import Flask, jsonify, request
 import os
 from flask_cors import CORS
 import google.generativeai as palm
-import json
-
+from supabase import create_client, Client
 import config
+import json
 
 
 palm_api_key = config.API_KEYS['palm']
 palm.configure(api_key=palm_api_key)
 
+supabase_url = 'https://nsmgorwiselturjwrosc.supabase.co'
+supabase_key = config.API_KEYS['supa_pwd']
+supabase: Client = create_client(supabase_url, supabase_key)
 
 defaults = {
     "model": "models/chat-bison-001",
@@ -60,7 +63,18 @@ def upload_file():
 
     if file:
         pdfFile = file.filename
+        file_path = '/path/to/your/file.jpg'
+        file_name = 'file.jpg'
+        bucket_name = 'files'
+
+        
+
+        print(pdfFile)
         file.save(file.filename)
+        
+        with open(pdfFile, 'rb') as f:
+            supabase.storage.from_("files").upload(file=f,path='./',file_options={"content-type": "application/pdf"})
+        
         inputpdf = PdfReader(open(pdfFile, "rb"))
         pages = []
         for i in range(len(inputpdf.pages)):
@@ -108,7 +122,7 @@ def chat():
     # print(response.last)
 
     resp = response.last
-
+    print("resp",resp )
     data_dict = resp.split("```json")[1]
     print(data_dict)
     return data_dict
