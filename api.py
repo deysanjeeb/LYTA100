@@ -88,12 +88,19 @@ def upload_file():
 
         print(pdfFile)
         file.save(pdfFile)
-        
+        csvs=[]
         res = supabase.storage.from_('files').list()
+        flag=0
+        for fil in res:
+            if fil['name'] == pdfFile:
+                flag=1
+                break
+
         print("bucket files: ",res)
-        with open(pdfFile, 'rb') as f:
-            supabase.storage.from_("files").upload(file=f,path="files/"+pdfFile)
-        
+        if flag==0:
+            with open(pdfFile, 'rb') as f:
+                supabase.storage.from_("files").upload(file=f,path=pdfFile)
+            
         inputpdf = PdfReader(open(pdfFile, "rb"))
         pages = []
         for i in range(len(inputpdf.pages)):
@@ -111,8 +118,11 @@ def upload_file():
             for table in tables:
                 print(tables[i].df)
                 tables[i].to_csv(page + str(i) + "_.csv")
+                with open((page + str(i) + "_.csv"), 'rb') as f:
+                    supabase.storage.from_("files").upload(file=f,path=pdfFile[:-4]+"/"+(page + str(i) + "_.csv"))
+                csvs.append(page + str(i) + "_.csv")
                 i += 1
-        return jsonify({"message": "csv created successfully"})
+        return jsonify({"csvs": csvs})
 
     return jsonify({"error": "Invalid file type"})
 
