@@ -1,42 +1,41 @@
-// ChatbotIcon.js
-
+// components/ChatbotIcon.js
 import React, { useState } from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import ChatbotUI from "./ChatbotUI";
+import { View, StyleSheet, TouchableOpacity, Modal } from "react-native";
+import { Icon } from "react-native-elements";
+import ChatWindow from "./ChatWindow";
 
 const ChatbotIcon = () => {
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isChatOpen, setChatOpen] = useState(false);
 
-  const handleToggleChat = () => {
-    setIsChatOpen(!isChatOpen);
+  const toggleChat = () => {
+    setChatOpen(!isChatOpen);
   };
 
   return (
-    <>
-      <TouchableOpacity style={styles.container} onPress={handleToggleChat}>
-        <Ionicons name="ios-chatbubbles" size={36} color="white" />
+    <View>
+      <TouchableOpacity
+        style={styles.chatbotIconContainer}
+        onPress={toggleChat}
+      >
+        <Icon name="chat" type="material" color="#517fa4" />
       </TouchableOpacity>
-      {isChatOpen && <ChatbotUI onClose={handleToggleChat} />}
-    </>
+      <Modal
+        visible={isChatOpen}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setChatOpen(false)}
+      >
+        <ChatWindow onClose={() => setChatOpen(false)} />
+      </Modal>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  chatbotIconContainer: {
     position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: "blue",
-    padding: 12,
-    borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
   },
 });
 

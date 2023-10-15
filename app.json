@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "A100",
-    "slug": "A100",
+    "name": "A",
+    "slug": "A",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,10 +11,11 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "y"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -24,15 +25,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-
-    "plugins": [
-      [
-        "expo-document-picker",
-        {
-          "iCloudContainerEnvironment": "Production"
-        }
-      ]
-    ]
+    }
   }
 }

@@ -1,22 +1,20 @@
-// LandingScreen.js
-
-import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+// screens/LandingPage.js
+import React from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
 import ChatbotIcon from "../components/ChatbotIcon";
 
-const LandingScreen = ({ navigation }) => {
-  const [chatbotVisible, setChatbotVisible] = useState(false);
-
-  const handleChatbotPress = () => {
-    setChatbotVisible(!chatbotVisible);
-  };
-
+const LandingPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Landing Page</Text>
-      {/* Your landing page content */}
-      {chatbotVisible && <ChatbotUI />}
-      <ChatbotIcon onPress={handleChatbotPress} isVisible={chatbotVisible} />
+      <Text style={styles.title}>Welcome to the Landing Page!</Text>
+      <Button
+        title="Logout"
+        onPress={() => {
+          // Add any logout logic here if needed
+          navigation.navigate("Login");
+        }}
+      />
+      <ChatbotIcon />
     </View>
   );
 };
@@ -26,8 +24,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 16,
   },
 });
 
-export default LandingScreen;
+export default LandingPage;

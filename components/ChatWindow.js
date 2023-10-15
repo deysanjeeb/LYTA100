@@ -1,20 +1,19 @@
-// ChatbotUI.js
-
-import React, { useState } from "react";
+// components/ChatWindow.js
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   TextInput,
+  ScrollView,
+  StyleSheet,
   TouchableOpacity,
   FlatList,
-  Alert,
+  Button,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import * as DocumentPicker from "expo-document-picker";
 import { useChat } from "../contexts/ChatContext";
-
-const ChatbotUI = ({ onClose }) => {
+import * as DocumentPicker from "expo-document-picker";
+const ChatWindow = ({ onClose }) => {
   const { chatMessages, addMessage } = useChat();
   const [inputText, setInputText] = useState("");
 
@@ -41,14 +40,98 @@ const ChatbotUI = ({ onClose }) => {
     }
   };
 
+  const getBotResponse = (userInput) => {
+    // Replace this with your actual chatbot integration logic
+    // For simplicity, just reversing the user's input
+    return userInput.split("").reverse().join("");
+  };
+
+  //   return (
+  //     <View style={[styles.container, styles.windowSize]}>
+  //       <ScrollView
+  //         ref={scrollViewRef}
+  //         contentContainerStyle={styles.chatHistoryContainer}
+  //       >
+  //         {chatHistory.map((message, index) => (
+  //           <Text key={index} style={styles.message}>
+  //             {message}
+  //           </Text>
+  //         ))}
+  //       </ScrollView>
+  //       <View style={styles.inputContainer}>
+  //         <TextInput
+  //           style={styles.input}
+  //           placeholder="Type your message..."
+  //           value={inputText}
+  //           onChangeText={(text) => setInputText(text)}
+  //         />
+  //         <Button title="Send" onPress={handleSend} />
+  //       </View>
+  //       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+  //         <Text style={styles.closeButtonText}>Close</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // };
+
+  // const styles = StyleSheet.create({
+  //   container: {
+  //     position: "absolute",
+  //     bottom: 0,
+  //     right: 0,
+  //     left: 0,
+  //     borderTopLeftRadius: 10,
+  //     borderTopRightRadius: 10,
+  //     backgroundColor: "white",
+  //   },
+  //   windowSize: {
+  //     height: 300, // Set the desired height
+  //   },
+  //   chatHistoryContainer: {
+  //     paddingBottom: 50, // To make space for the input area
+  //   },
+  //   message: {
+  //     fontSize: 16,
+  //     marginBottom: 8,
+  //   },
+  //   inputContainer: {
+  //     flexDirection: "row",
+  //     alignItems: "center",
+  //     position: "absolute",
+  //     bottom: 0,
+  //     left: 0,
+  //     right: 0,
+  //     padding: 16,
+  //     borderTopWidth: 1,
+  //     borderTopColor: "#ccc",
+  //     backgroundColor: "#f9f9f9",
+  //   },
+  //   input: {
+  //     flex: 1,
+  //     height: 40,
+  //     borderColor: "gray",
+  //     borderWidth: 1,
+  //     marginRight: 8,
+  //     paddingHorizontal: 8,
+  //   },
+  //   closeButton: {
+  //     position: "absolute",
+  //     top: 10,
+  //     right: 10,
+  //   },
+  //   closeButtonText: {
+  //     color: "blue",
+  //   },
+  // });
   const handleAttachDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync();
+      console.log(result);
 
-      if (result.type === "success") {
+      if (result) {
         const selectedDocument = {
           id: chatMessages.length + 1,
-          text: `File Attached: ${result.name}`,
+          text: `File Attached: ${result.assets[0].name}`,
           isUser: true,
           document: result,
         };
@@ -74,13 +157,13 @@ const ChatbotUI = ({ onClose }) => {
       Alert.alert("Error", "Failed to pick a document. Please try again.");
     }
   };
-
   const renderItem = ({ item }) => {
     if (item.document) {
+      console.log(item);
       return (
         <View style={item.isUser ? styles.userMessage : styles.botMessage}>
           <Text>{item.text}</Text>
-          <Text>Document Attached: {item.document.name}</Text>
+          <Text>Document Attached</Text>
         </View>
       );
     }
@@ -91,7 +174,6 @@ const ChatbotUI = ({ onClose }) => {
       </View>
     );
   };
-
   return (
     <View style={[styles.container, styles.windowSize]}>
       <FlatList
@@ -134,7 +216,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   windowSize: {
-    height: 300, // Set the desired height
+    height: 700, // Set the desired height
   },
   inputContainer: {
     flexDirection: "row",
@@ -178,4 +260,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatbotUI;
+export default ChatWindow;

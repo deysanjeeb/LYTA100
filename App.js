@@ -1,9 +1,9 @@
 // App.js
-
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { ChatProvider } from "./contexts/ChatContext";
 import AppNavigator from "./navigation/AppNavigator";
+import { NavigationContainer } from "@react-navigation/native";
+
+import { ChatProvider } from "./contexts/ChatContext";
 
 const App = () => {
   return (
@@ -14,4 +14,5 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
 export default App;

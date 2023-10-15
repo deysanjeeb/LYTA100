@@ -1,12 +1,12 @@
-// LoginScreen.js
-
+// screens/LoginScreen.js
 import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  Button,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 
 const LoginScreen = ({ navigation }) => {
@@ -14,8 +14,10 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    // Implement your login logic here
-    // Navigate to the landing page upon successful login
+    // Add authentication logic here
+    console.log("Login:", email, password);
+
+    // Assuming successful login, navigate to the landing page
     navigation.navigate("Landing");
   };
 
@@ -25,25 +27,20 @@ const LoginScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Email"
-        onChangeText={(text) => setEmail(text)}
         value={email}
+        onChangeText={(text) => setEmail(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
-        onChangeText={(text) => setPassword(text)}
-        value={password}
         secureTextEntry
+        value={password}
+        onChangeText={(text) => setPassword(text)}
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      <Button title="Login" onPress={handleLogin} />
+      <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+        <Text style={styles.signupText}>Don't have an account? Sign up!</Text>
       </TouchableOpacity>
-      <Text
-        style={styles.signupText}
-        onPress={() => navigation.navigate("Signup")}
-      >
-        Don't have an account? Sign up here
-      </Text>
     </View>
   );
 };
@@ -57,7 +54,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
     marginBottom: 16,
   },
   input: {
@@ -65,26 +61,12 @@ const styles = StyleSheet.create({
     width: "80%",
     borderColor: "gray",
     borderWidth: 1,
-    borderRadius: 8,
     marginBottom: 16,
-    paddingLeft: 10,
-  },
-  button: {
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 8,
-    width: "80%",
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+    paddingLeft: 8,
   },
   signupText: {
     marginTop: 16,
     color: "blue",
-    textDecorationLine: "underline",
   },
 });
 
