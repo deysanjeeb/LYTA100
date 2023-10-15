@@ -6,11 +6,13 @@ from flask_cors import CORS
 import google.generativeai as palm
 import json
 
-# import config
+import config
 
-# import configc
-palm_api_key = "AIzaSyAlCsMegkM75LsGnr8hoBsdOxAz1deiTtE"
+
+palm_api_key = config.API_KEYS['palm']
 palm.configure(api_key=palm_api_key)
+
+
 defaults = {
     "model": "models/chat-bison-001",
     "temperature": 0.25,
