@@ -16,22 +16,6 @@ supabase_url = 'https://nsmgorwiselturjwrosc.supabase.co'
 supabase_key = config.API_KEYS['supa_pwd']
 supabase: Client = create_client(supabase_url, supabase_key)
 
-# res = supabase.storage.create_bucket("lesgo")
-res = supabase.storage.list_buckets()
-# print(res)
-# from storage3 import create_client
-
-# url = "https://nsmgorwiselturjwrosc.supabase.co/storage/v1"
-# key = config.API_KEYS['supa_pwd']
-# headers = {"apiKey": key, "Authorization": f"Bearer {key}"}
-
-# # pass in is_async=True to create an async client
-# storage_client = create_client(url, headers, is_async=False)
-
-# print(storage_client.list_buckets())
-
-
-
 defaults = {
     "model": "models/chat-bison-001",
     "temperature": 0.25,
@@ -94,14 +78,11 @@ def upload_file():
         return jsonify({"error": "No file selected"})
 
     if file:
-        pdfFile = ''.join(random.choices(string.ascii_letters + string.digits, k=8))+".pdf"
+        # pdfFile = ''.join(random.choices(string.ascii_letters + string.digits, k=8))+".pdf"
 
-        # pdfFile = file.filename
-        # pdfFile = pdfFile.replace(" ", "")
+        pdfFile = file.filename
+        pdfFile = pdfFile.replace(" ", "")
         print(pdfFile)
-        file_path = '/path/to/your/file.jpg'
-        file_name = 'file.jpg'
-        bucket_name = 'files'
 
         
 
@@ -111,7 +92,7 @@ def upload_file():
         res = supabase.storage.from_('files').list()
         print("bucket files: ",res)
         with open(pdfFile, 'rb') as f:
-            supabase.storage.from_("files").upload(file=f,path='./')
+            supabase.storage.from_("files").upload(file=f,path="files/"+pdfFile)
         
         inputpdf = PdfReader(open(pdfFile, "rb"))
         pages = []
