@@ -43,7 +43,7 @@ def upload_file():
                 print(tables[i].df)
                 tables[i].to_csv(page+str(i)+"_.csv")
                 i+=1
-        return jsonify({'message': 'File uploaded successfully'})
+        return jsonify({'message': 'csv created successfully'})
     
 
     return jsonify({'error': 'Invalid file type'})
