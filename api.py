@@ -3,6 +3,12 @@ from PyPDF2 import PdfWriter, PdfReader
 
 from flask import Flask, jsonify, request
 import os
+from flask_cors import CORS
+
+import google.generativeai as palm
+import config
+
+palm_api_key = config.API_KEYS['palm']
 
 app = Flask(__name__)
 
@@ -47,6 +53,17 @@ def upload_file():
     
 
     return jsonify({'error': 'Invalid file type'})
+
+
+@app.route('/chat', methods=['POST'])
+def chat():
+
+    if 'text' not in request.form:
+        return jsonify({'error': 'No text provided'})
+    
+    text = request.form['text']
+
+   
 
 
 if __name__ == '__main__':
