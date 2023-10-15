@@ -1,0 +1,6 @@
+camelot-py
+PyPDF2
+Flask
+flask-cors
+google-cloud-aiplatform
+supabase

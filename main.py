@@ -7,7 +7,7 @@ app = Flask(__name__)
 OPENAI_API_ENDPOINT = (
     "https://api.openai.com/v2/engines/chatgpt4-imagerecog/completions"
 )
-OPENAI_API_KEY = "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"
+
 
 
 @app.route("/recognize", methods=["POST"])
