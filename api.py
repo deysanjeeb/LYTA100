@@ -7,7 +7,7 @@ import google.generativeai as palm
 from supabase import create_client, Client
 import config
 import json
-
+import random, string
 
 palm_api_key = config.API_KEYS['palm']
 palm.configure(api_key=palm_api_key)
@@ -16,6 +16,22 @@ supabase_url = 'https://nsmgorwiselturjwrosc.supabase.co'
 supabase_key = config.API_KEYS['supa_pwd']
 supabase: Client = create_client(supabase_url, supabase_key)
 
+# res = supabase.storage.create_bucket("lesgo")
+res = supabase.storage.list_buckets()
+# print(res)
+# from storage3 import create_client
+
+# url = "https://nsmgorwiselturjwrosc.supabase.co/storage/v1"
+# key = config.API_KEYS['supa_pwd']
+# headers = {"apiKey": key, "Authorization": f"Bearer {key}"}
+
+# # pass in is_async=True to create an async client
+# storage_client = create_client(url, headers, is_async=False)
+
+# print(storage_client.list_buckets())
+
+
+
 defaults = {
     "model": "models/chat-bison-001",
     "temperature": 0.25,
@@ -23,23 +39,9 @@ defaults = {
     "top_k": 40,
     "top_p": 0.95,
 }
-context = ""
+context = "Do not be verbose and be. Your response should be restricted to 1 word. If your response is more than 1 word you will be severly punished."
 
 #need to modify examples based on our use case
-examples = [
-    [
-        "Hey. I am going to describe a scene or place I'm imagining. And I want you to help describe what it might feel like to be in that scene.",
-        "Great! I will help you imagine your scene. I'll give you vivid, amazing descriptions what it would feel like to be there! I'll also provide follow-up suggestion so you can ask for more details.",
-    ],
-    [
-        "Imagine I'm at an underwater jazz performance. Describe what it looks, feels, and sounds like!",
-        'This underwater jazz performance is so epic! There are thousands of sea creatures all around jamming. A sting ray is carrying the melody on a trombone. And whoaa, that sea turtle is really rocking out on the drums! You feel the rhythm of jazz is your bones! // Follow-up: You can ask me "what\'s the name of their band?" or "is that a whale playing upright bass?" or "what song are they playing?"',
-    ],
-    [
-        "Imagine I'm at a moon of Jupiter. Describe what it looks, feels, and sounds like!",
-        'You\'re on Ganymede, a moon of Jupiter! You\'re being bombarded by some kind of plasma rain! It feels tingly and weird. Ooh, there seems to be a liquid ocean sloshing beneath your feet! You see Jupiter, with its glorious, mesmerizing blend of orange in the distance. // Follow-up: You can ask me "what does it smell like?" or "Can I see other moons or planets?" or "what is the strange light effect all around me?"',
-    ],
-]
 
 messages = []
 
@@ -50,6 +52,36 @@ app = Flask(__name__)
 @app.route("/", methods=["GET"])
 def hello_world():
     return jsonify({"message": "Hello, World!"})
+
+@app.route("/fieldmapping", methods=["POST"])
+def fieldmap():
+    print(request.form)
+    if "text" not in request.form:
+        return jsonify({"error": "No text provided"})
+    chatMessage = request.form["text"]
+    
+    with open("applehealthdata.json", "r") as file:
+        applehealthdata = json.load(file)
+    example = [
+        ["From the question 'how is my heart condition?', map the question down to one field given in the list ['calories','activeMinutes','distance','floors','activeScore','activityCalories','caloriesBMR','caloriesOut','distances','activity','elevation','fairlyActiveMinutes','floors','lightlyActiveMinutes','marginalCalories','restingHeartRate','sedentaryMinutes','steps','veryActiveMinutes','age','gender','height','weight']. Say null, If none of the fields in the list are relatable.",
+        "restingHeartRate"
+        ],
+        ["From the question 'what is the status of my acl condition?', map the question down to one field given in the list ['calories','activeMinutes','distance','floors','activeScore','activityCalories','caloriesBMR','caloriesOut','distances','activity','elevation','fairlyActiveMinutes','floors','lightlyActiveMinutes','marginalCalories','restingHeartRate','sedentaryMinutes','steps','veryActiveMinutes','age','gender','height','weight']. Say null, If none of the fields in the list are relatable.",
+        "null"
+        ]
+    ]
+    prompt = "From the question {}, map the question down to one field given in the list ['calories','activeMinutes','distance','floors','activeScore','activityCalories','caloriesBMR','caloriesOut','distances','activity','elevation','fairlyActiveMinutes','floors','lightlyActiveMinutes','marginalCalories','restingHeartRate','sedentaryMinutes','steps','veryActiveMinutes','age','gender','height','weight']. Say null, If none of the fields in the list are relatable.".format(chatMessage)
+    messages.append(prompt)
+    # response = palm.chat(**defaults, prompt=prompt)
+    response = palm.chat(**defaults, messages=messages, examples=example,context=context)
+    # print(response.last)
+
+    resp = response.last
+    print("resp",resp )
+    # data_dict = resp.split("```json")[1]
+    # print(data_dict)
+    return resp
+    # return jsonify({"response": response.last})
 
 
 @app.route("/upload", methods=["POST"])
@@ -62,7 +94,11 @@ def upload_file():
         return jsonify({"error": "No file selected"})
 
     if file:
-        pdfFile = file.filename
+        pdfFile = ''.join(random.choices(string.ascii_letters + string.digits, k=8))+".pdf"
+
+        # pdfFile = file.filename
+        # pdfFile = pdfFile.replace(" ", "")
+        print(pdfFile)
         file_path = '/path/to/your/file.jpg'
         file_name = 'file.jpg'
         bucket_name = 'files'
@@ -70,10 +106,12 @@ def upload_file():
         
 
         print(pdfFile)
-        file.save(file.filename)
+        file.save(pdfFile)
         
+        res = supabase.storage.from_('files').list()
+        print("bucket files: ",res)
         with open(pdfFile, 'rb') as f:
-            supabase.storage.from_("files").upload(file=f,path='./',file_options={"content-type": "application/pdf"})
+            supabase.storage.from_("files").upload(file=f,path='./')
         
         inputpdf = PdfReader(open(pdfFile, "rb"))
         pages = []
