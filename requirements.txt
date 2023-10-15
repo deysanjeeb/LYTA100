@@ -1,6 +1,5 @@
-camelot
+camelot-py
 PyPDF2
-flask
-flask_cors
-google.generativeai
-json
+Flask
+flask-cors
+google-cloud-aiplatform

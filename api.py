@@ -19,6 +19,8 @@ defaults = {
     "top_p": 0.95,
 }
 context = ""
+
+#need to modify examples based on our use case
 examples = [
     [
         "Hey. I am going to describe a scene or place I'm imagining. And I want you to help describe what it might feel like to be in that scene.",
@@ -33,6 +35,7 @@ examples = [
         'You\'re on Ganymede, a moon of Jupiter! You\'re being bombarded by some kind of plasma rain! It feels tingly and weird. Ooh, there seems to be a liquid ocean sloshing beneath your feet! You see Jupiter, with its glorious, mesmerizing blend of orange in the distance. // Follow-up: You can ask me "what does it smell like?" or "Can I see other moons or planets?" or "what is the strange light effect all around me?"',
     ],
 ]
+
 messages = []
 
 
